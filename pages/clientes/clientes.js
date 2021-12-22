@@ -10,6 +10,7 @@ import Spinner from '../../components/Layouts/Spinner'
 import ModalRegistrarCliente from '../../components/clientes/ModalRegistrarCliente';
 import moment from 'moment';
 import { confirmAlert } from 'react-confirm-alert';
+import { registrarHistoria } from '../../utils/funciones';
 
 const Clientes = () => {
 
@@ -73,6 +74,8 @@ const Clientes = () => {
     }
 
     const verCliente = (row) => {
+        guardarRow(null)
+
         guardarRow(row)
 
         traerDatosAdicionales(row.idcliente)
@@ -85,8 +88,8 @@ const Clientes = () => {
                 guardarRazonSoc(res.data)
 
                 axios.get(`${ip}api/clientes/adherentes/${id}`)
-                    .then(res => {
-                        guardarConyugue(res.data)
+                    .then(res1 => {
+                        guardarConyugue(res1.data)
                     })
                     .catch(error => {
                         console.log(error)
@@ -176,7 +179,7 @@ const Clientes = () => {
 
                                     let accion = `Se registro el cliente con el numero: ${res.data.idcliente} - ${res.data.apellido}, ${res.data.nombre}, DNI: ${res.data.dni}`
 
-                                    registrarHistoria(res.data.idcliente, accion)
+                                    registrarHistoria(res.data.idcliente, accion, user.usuario)
 
                                     if (regCon.apellido !== "") {
                                         regCon.idcliente = res.data.idcliente
@@ -241,7 +244,7 @@ const Clientes = () => {
 
                                     let accion = `Se elimino el cliente ${row.idcliente}: ${row.apellido}, ${row.nombre} - DNI: ${row.dni}`
 
-                                    registrarHistoria(row.idcliente, accion)
+                                    registrarHistoria(row.idcliente, accion, user.usuario)
 
                                 }
                             })
@@ -262,29 +265,6 @@ const Clientes = () => {
 
     }
 
-    const registrarHistoria = async (id, accion) => {
-
-        const historial = {
-            operador: user.usuario,
-            fecha: moment().format('YYYY-MM-DD HH:mm:ss'),
-            accion: accion,
-            idcliente: id
-        }
-
-        await axios.post(`${ip}api/historialcliente/reghistorial`, historial)
-            .then(res => {
-                console.log(res.data)
-
-                if (res.status === 200) {
-                    toastr.info("Esta accion se registor en el historial", "ATENCION")
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                toastr.error("Ocurrio un error al registrar la accion en el historial", "ATENCION")
-            })
-
-    }
 
     return (
         <Layout>

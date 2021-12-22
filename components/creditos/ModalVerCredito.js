@@ -1,214 +1,200 @@
 import React from 'react'
-import Spinner from '../Layouts/Spinner'
 
-const ModalVerCliente = ({ row, conyugue, razonSoc }) => {
-
-    if (row.lenght === 0) return <Spinner />
-
-    console.log(razonSoc)
+const ModalVerCredito = ({ row, cliente }) => {
 
     return (
-        <div className="modal fade" id="verCliente" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="verCredito" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-xl">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">Cliente: {row.apellido}, {row.nombre} </h5>
+                        <h5 className="modal-title" id="exampleModalLabel"><u><strong>Informacion del Credito</strong></u>: {row.idcredito}</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body alert alert-secondary">
-                        <div className=" border border-dark p-4 bgbox">
-
-                            <h4>
-                                <strong>
-                                    <u>
-                                        Datos del Cliente
-                                    </u>
-                                </strong>
-                            </h4>
-
-                            <div className="row">
 
 
-                                <div className="col-md-3 mt-4">
-                                    <label>
+                        {cliente.idcliente ? (
+                            <div className=" border border-dark p-4 bgbox">
+                                <h4>
+                                    <strong>
                                         <u>
-                                            DNI
+                                            Datos del Cliente
                                         </u>
-                                    </label>
-                                    <input
-                                        className="form-control mt-2"
-                                        defaultValue={row.dni}
-                                        readOnly
-                                    />
-                                </div>
-                                <div className="col-md-6 mt-4">
-                                    <label>
-                                        <u>
-                                            Direccion
-                                        </u>
-                                    </label>
-                                    <input
-                                        className="form-control mt-2"
-                                        defaultValue={row.direccion}
-                                        readOnly
-                                    />
-                                </div>
-                                <div className="col-md-6 mt-4">
-                                    <label>
-                                        <u>
-                                            Barrio
-                                        </u>
-                                    </label>
-                                    <input
-                                        className="form-control mt-2"
-                                        defaultValue={row.barrio}
-                                        readOnly
-                                    />
-                                </div>
+                                    </strong>
+                                </h4>
 
-                                <div className="col-md-6 mt-4">
-                                    <label>
-                                        <u>
-                                            Telefono
-                                        </u>
-                                    </label>
-                                    <input
-                                        className="form-control mt-2"
-                                        defaultValue={row.telefono}
-                                        readOnly
-                                    />
+                                <div className="row">
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Apellido
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.apellido}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Nombre
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.nombre}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                DNI
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.dni}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-6 mt-4">
+                                        <label>
+                                            <u>
+                                                Direccion
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.direccion}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-6 mt-4">
+                                        <label>
+                                            <u>
+                                                Barrio
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.barrio}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div className="col-md-4 mt-4">
+                                        <label>
+                                            <u>
+                                                Telefono
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={cliente.telefono}
+                                            readOnly
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {conyugue.lenght === 0 ?
-                            (<div className="alert alert-info border border-dark text-center text-uppercase">No posee conyugue registrado</div>)
-                            : (
-                                <div className="mt-4 border border-dark p-4 bgbox">
+                        ) : <div className="alert alert-info border border-dark text-center text-uppercase mt-4 mb-4">No hay datos del cliente</div>}
 
-                                    <h4>
-                                        <strong>
+                        {row.idcredito ? (
+                            <div className="mt-4 border border-dark p-4 bgbox">
+                                <h4>
+                                    <strong>
+                                        <u>
+                                            Datos del Credito
+                                        </u>
+                                    </strong>
+                                </h4>
+
+                                <div className="row">
+
+                                    <div className="col-md-3 mt-4">
+                                        <label>
                                             <u>
-                                                Conyugue
+                                                Credito
                                             </u>
-                                        </strong>
-                                    </h4>
-
-                                    <div className="row">
-
-
-                                        <div className="col-md-4 mt-4">
-                                            <label>
-                                                <u>
-                                                    Apellido
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={conyugue.apellido}
-                                                readOnly
-                                            />
-                                        </div>
-
-                                        <div className="col-md-4 mt-4">
-                                            <label>
-                                                <u>
-                                                    Nombre
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={conyugue.nombre}
-                                                readOnly
-                                            />
-                                        </div>
-
-                                        <div className="col-md-4 mt-4">
-                                            <label>
-                                                <u>
-                                                    DNI
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={conyugue.dni}
-                                                readOnly
-                                            />
-                                        </div>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.prestamo}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Valor de la Cuota
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.monto_cuota}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Plan de Cuotas
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.cant_cuota}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Anticipo
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.anticipo}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Monto Final
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.monto_final}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div className="col-md-3 mt-4">
+                                        <label>
+                                            <u>
+                                                Vendedor
+                                            </u>
+                                        </label>
+                                        <input
+                                            className="form-control mt-2"
+                                            value={row.vendedor}
+                                            readOnly
+                                        />
                                     </div>
                                 </div>
+                            </div>
 
-                            )}
-
-                        {razonSoc.lenght === 0 ?
-                            (<div className="alert alert-info border border-dark text-center text-uppercase">No posee Razon Social registrada</div>)
-                            : (
-
-                                <div className="mt-4 border border-dark p-4 bgbox">
-
-                                    <h4>
-                                        <strong>
-                                            <u>
-                                                Razon Social
-                                            </u>
-                                        </strong>
-                                    </h4>
-
-                                    <div className="row">
+                        ) : <div className="alert alert-info border border-dark text-center text-uppercase mt-4 mb-4">No hay datos del credito</div>}
 
 
-                                        <div className="col-md-6 mt-4">
-                                            <label>
-                                                <u>
-                                                    Descripcion
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={razonSoc.razon_social}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div className="col-md-6 mt-4">
-                                            <label>
-                                                <u>
-                                                    Direccion
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={razonSoc.direccion_legal}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div className="col-md-6 mt-4">
-                                            <label>
-                                                <u>
-                                                    Barrio
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={razonSoc.barrio_legal}
-                                                readOnly
-                                            />
-                                        </div>
 
-                                        <div className="col-md-6 mt-4">
-                                            <label>
-                                                <u>
-                                                    Telefono
-                                                </u>
-                                            </label>
-                                            <input
-                                                className="form-control mt-2"
-                                                defaultValue={razonSoc.tel_legal}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -219,4 +205,4 @@ const ModalVerCliente = ({ row, conyugue, razonSoc }) => {
     )
 }
 
-export default ModalVerCliente
+export default ModalVerCredito

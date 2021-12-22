@@ -3,7 +3,13 @@ import toastr from "toastr";
 import DataTable from "react-data-table-component";
 import FilterComponent from "./FilterComponent";
 
-const ListadoCreditos = ({ listado }) => {
+const ListadoCreditos = ({
+    listado,
+    verCredito,
+    eliminarCredito,
+    push
+}) => {
+
 
     const columns = [
 
@@ -11,61 +17,80 @@ const ListadoCreditos = ({ listado }) => {
             name: "N° Cliente",
             selector: "idcliente",
             sortable: true,
-            grow: 0.4
+            grow: 0.1
         },
 
         {
-            name: "Apellido",
-            selector: "apellido",
+            name: "Credito",
+            selector: "prestamo",
             sortable: true,
-            grow: 0.5
+            grow: 0.1
+        },
+        {
+            name: "Anticipo",
+            selector: "anticipo",
+            sortable: true,
+            grow: 0.1
+        },
+        {
+            name: "Monto Final",
+            selector: "monto_final",
+            sortable: true,
+            grow: 0.1
         },
 
         {
-            name: "Nombre",
-            selector: "nombre",
+            name: "Cuota",
+            selector: "monto_cuota",
             sortable: true,
-            grow: 0.8
+            grow: 0.1
         },
 
         {
-            name: "DNI",
-            selector: "dni",
+            name: "Plan de Cuotas",
+            selector: "cant_cuota",
             sortable: true,
-            grow: 0.4
+            grow: 0.1
         },
-
         {
-            name: "Telefono",
-            selector: "telefono",
+            name: "Fecha",
+            selector: "fecha",
             sortable: true,
-
+            grow: 0.1
         },
         {
             name: "acciones",
             button: true,
+            grow: 0.2,
             cell: row =>
             (
                 <>
                     <button
-                        onClick={() => verCliente(row)}
-                        className="btn btn-sm btn-info"
+                        onClick={() => verCredito(row)}
+                        className="btn btn-sm btn-info me-1"
                         data-bs-toggle="modal"
-                        data-bs-target="#verCliente"
+                        data-bs-target="#verCredito"
                     >
                         <i className="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <button
                         onClick={() => toastr.warning("Modulo en proceso de programacion", "ATENCION")}
-                        className="btn btn-sm btn-warning"
+                        className="btn btn-sm btn-warning me-1"
                     >
                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </button>
                     <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => eliminarCliente(row)}>
+                        className="btn btn-sm btn-danger me-1"
+                        onClick={() => eliminarCredito(row)}>
                         <i className="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
+                    <button
+                        className="btn btn-sm btn-primary me-1"
+                        onClick={() => push('/cobranza/cobranza', row.idcliente, row.idcredito)}
+                    >
+                        <i className="fa fa-money" aria-hidden="true"></i>
+                    </button>
+
                 </>
 
             )

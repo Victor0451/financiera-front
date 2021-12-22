@@ -8,7 +8,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
                 <input
                     id="search"
                     type="text"
-                    placeholder="Buscar Credito"
+                    placeholder="Buscar Cobranza"
                     value={filterText}
                     onChange={onFilter}
                     className="form-control"

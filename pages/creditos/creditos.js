@@ -4,12 +4,14 @@ import jsCookie from 'js-cookie'
 import axios from 'axios';
 import toastr from 'toastr';
 import { ip, interest } from '../../config/config'
-import Spinner from '../../components/Layouts/Spinner'
 import moment from 'moment';
 import { confirmAlert } from 'react-confirm-alert';
+import Router from "next/router";
 import ListadoCreditos from '../../components/creditos/ListadoCreditos';
 import ModalRegistrarCliente from '../../components/creditos/ModalRegistrarCredito';
-
+import ModalVerCredito from '../../components/creditos/ModalVerCredito';
+import {registrarHistoria, push} from '../../utils/funciones'
+ 
 const Creditos = () => {
 
     let idClienteRef = React.createRef();
@@ -17,21 +19,22 @@ const Creditos = () => {
     let cuotasRef = React.createRef();
     let prestamoRef = React.createRef();
     let vendedorRef = React.createRef();
+    let anticipoRef = React.createRef();
+
 
     const [cuoprest, guardarCuoprest] = useState(null);
     const [capadev, guardarCapadev] = useState(null);
     const [flag, guardarFlag] = useState(false);
-
-
-
     const [user, guardarUsuario] = useState(null);
     const [row, guardarRow] = useState([]);
     const [listado, guardarListado] = useState([]);
     const [planCuotas, guardarPlanCuotas] = useState([]);
     const [empleados, guardarEmpleados] = useState([]);
     const [cliente, guardarCliente] = useState([]);
+    const [creditosCliente, guardarCreditosCliente] = useState([]);
+    const [info, guardarInfo] = useState(null);
     const [errores, guardarErrores] = useState(null);
-
+    const [totalFinal, guardarTotalFinal] = useState(0);
 
 
     let token = jsCookie.get("token");
@@ -96,6 +99,26 @@ const Creditos = () => {
 
     }
 
+    const buscarCreditosCliente = async (id) => {
+
+        await axios.get(`${ip}api/creditos/creditoscliente/${id}`)
+            .then(res => {
+                if (res.data.length !== 0) {
+                    toastr.info(`Cliente posee creditos activos sin cancelar, se debe analizar su situacion`, "ATENCION")
+                    guardarInfo("Cliente posee creditos activos sin cancelar, se debe analizar su situacion")
+                    guardarCreditosCliente(res.data)
+                } else {
+                    toastr.info("El cliente no posee creditos activos", "ATENCION")
+                    guardarInfo("El cliente no posee creditos activos")
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                toastr.error("Ocurrio un error al buscar los creditos del cliente", "ATENCION")
+            })
+
+    }
+
     const buscarCliente = async () => {
 
         guardarErrores(null)
@@ -115,6 +138,7 @@ const Creditos = () => {
                     if (res.data) {
                         toastr.success(`Cliente encontrado: ${res.data.apellido}, ${res.data.nombre}`, "ATENCION")
                         guardarCliente(res.data)
+                        buscarCreditosCliente(res.data.idcliente)
                     } else {
                         toastr.info("El cliente solicitado no esta registrado", "ATENCION")
                         guardarCliente([])
@@ -129,6 +153,7 @@ const Creditos = () => {
                     if (res.data) {
                         toastr.success(`Cliente encontrado: ${res.data.apellido}, ${res.data.nombre}`, "ATENCION")
                         guardarCliente(res.data)
+                        buscarCreditosCliente(res.data.idcliente)
                     } else {
                         toastr.info("El cliente solicitado no esta registrado", "ATENCION")
                         guardarCliente([])
@@ -157,30 +182,159 @@ const Creditos = () => {
         guardarCapadev(capadev);
 
         guardarFlag(true);
+
+        guardarTotalFinal(capadev)
     };
 
-    const verCredito = (row) => {
+    const verCredito = async (row) => {
         guardarRow(row)
 
+        await axios.get(`${ip}api/clientes/existeidcliente/${row.idcliente}`)
+            .then(res => {
+                if (res.data) {
+                    guardarCliente(res.data)
+                } else {
+                    toastr.info("El cliente solicitado no esta registrado", "ATENCION")
+                    guardarErrores("El cliente solicitado no esta registrado")
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                toastr.error("Ocurrio un error al traer el credito")
+            })
     }
+
+    const calcTotalFinal = () => {
+
+        guardarErrores(null)
+
+        let anti = anticipoRef.current.value
+
+        if (anti === "" || anti === 0) {
+
+            guardarTotalFinal(capadev)
+
+        } else if (anti > capadev) {
+
+            guardarErrores("El anticipo no puede ser mayor que el capital a devolver")
+
+            toastr.warning("El anticipo no puede ser mayor que el capital a devolver", "ATENCION")
+
+            guardarTotalFinal(capadev)
+
+        } else {
+
+            let total = capadev - anti
+
+            guardarTotalFinal(total)
+
+        }
+    }
+
+    const registrarCredito = async () => {
+
+        guardarErrores(null)
+
+        if (cliente.length === 0) {
+            guardarErrores("Debes buscar al cliente para poder confeccionar el credito")
+            toastr.warning("Debes buscar al cliente para poder confeccionar el credito", "ATENCION")
+        } else {
+
+            const credito = {
+                idcliente: cliente.idcliente,
+                prestamo: prestamoRef.current.value,
+                monto_final: totalFinal,
+                monto_cuota: cuoprest,
+                cant_cuota: cuotasRef.current.value,
+                monto_pagado: 0,
+                anticipo: anticipoRef.current.value,
+                vendedor: vendedorRef.current.value,
+                operador: user.usuario,
+                fecha: moment().format('YYYY-MM-DD HH:mm:ss'),
+                idzona: cliente.idzona,
+                estado: 1
+            }
+
+            if (credito.vendedor === "no") {
+                guardarErrores("Debes ingresar al vendedor del credito")
+            } else if (credito.prestamo === "") {
+                guardarErrores("Debes ingresar el monto del credito para poder confeccionarlo")
+            } else if (credito.cant_cuota === "no") {
+                guardarErrores("Debes ingresar el plan de cuotas del credito")
+            } else if (!capadev) {
+                guardarErrores("Debes calcular el credito para obtener el total final y la cuota del credito")
+            } else {
+
+                if (credito.anticipo === "") {
+                    credito.anticipo = 0
+                }
+
+                await axios.post(`${ip}api/creditos/nuevocredito`, credito)
+                    .then(res => {
+                        if (res.status === 200) {
+                            toastr.success("Se registro el credito con exito", "ATENCION")
+
+                            traerCreditos()
+
+                            let accion = `Se registro el credito N° ${res.data.idcredito} al cliente ${res.data.idcliente}`
+
+                            registrarHistoria(res.data.idcliente, accion, user.usuario)
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        toastr.error("Ocurrio un error al registrar el credito", "ATENCION")
+                    })
+            }
+        }
+    }
+
+    const eliminarCredito = async () => {
+        await confirmAlert({
+            title: 'ATENCION',
+            message: '¿Esta seguro que quieres eliminar el credito?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        axios.delete(`${ip}api/creditos/eliminarcredito/${row.idcredito}`)
+                            .then(res => {
+                                if (res.status === 200) {
+                                    toastr.success("El credito se elimino con exito", "ATENCION")
+                                    traerCreditos()
+
+                                    let accion = `Se elimino el credito ${row.idcredito}, del cliente ${row.idcliente}`
+
+                                    registrarHistoria(row.idcliente, accion, user.usuario)
+
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                toastr.error("Ocurrio un error al eliminar al credito", "ATENCION")
+                            })
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        toastr.info("Se cancelo la accion, el credito no fue eliminado", "ATENCION")
+                    }
+                }
+            ]
+        });
+    }
+
+  
 
     return (
         <Layout>
 
-            {/* {listado.length === 0 ? <Spinner />
-                : (
-                    <>
-                        <ListadoCreditos listado={listado} />
-
-                        <ModalRegistrarCliente />
-                    </>
-                )
-            } */}
-
-
             <ListadoCreditos
                 listado={listado}
-
+                verCredito={verCredito}
+                eliminarCredito={eliminarCredito}
+                push={push}
             />
 
             <ModalRegistrarCliente
@@ -192,12 +346,24 @@ const Creditos = () => {
                 prestamoRef={prestamoRef}
                 vendedorRef={vendedorRef}
                 cuotasRef={cuotasRef}
+                anticipoRef={anticipoRef}
                 buscarCliente={buscarCliente}
                 errores={errores}
                 cuoprest={cuoprest}
                 capadev={capadev}
                 calculoPrestamo={calculoPrestamo}
                 flag={flag}
+                calcTotalFinal={calcTotalFinal}
+                totalFinal={totalFinal}
+                registrarCredito={registrarCredito}
+                info={info}
+                creditosCliente={creditosCliente}
+
+            />
+
+            <ModalVerCredito
+                row={row}
+                cliente={cliente}
             />
 
         </Layout>

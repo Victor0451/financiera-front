@@ -16,6 +16,15 @@ a {
   box-sizing: border-box;
 }
 
+
+.prepagos {
+  height: 340px;
+  overflow-y: auto;
+  white-space: nowrap;
+
+}
+
+
 .bgbox {
   background-color: white !important;
 }

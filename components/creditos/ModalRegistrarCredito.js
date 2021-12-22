@@ -8,15 +8,19 @@ const ModalRegistrarCliente = ({
     prestamoRef,
     vendedorRef,
     planCuotas,
+    anticipoRef,
     cliente,
     empleados,
     errores,
     buscarCliente,
     cuoprest,
     capadev,
-    calculoPrestamo
+    calculoPrestamo,
+    calcTotalFinal,
+    totalFinal,
+    registrarCredito,
+    info
 }) => {
-    console.log(cliente)
 
     return (
         <div className="modal fade" id="registrarCredito" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -30,11 +34,11 @@ const ModalRegistrarCliente = ({
                         <div className=" border border-dark p-4 bgbox">
 
                             <h4>
-                                <strong>
-                                    <u>
-                                        Buscar Cliente
-                                    </u>
-                                </strong>
+
+                                <u>
+                                    Buscar Cliente
+                                </u>
+
                             </h4>
 
                             <div className="row">
@@ -84,16 +88,22 @@ const ModalRegistrarCliente = ({
                                         <div className="mt-4 border border-dark p-4 bgbox">
 
                                             <h4>
-                                                <strong>
-                                                    <u>
-                                                        Datos del Cliente
-                                                    </u>
-                                                </strong>
+
+                                                <u>
+                                                    Datos del Cliente
+                                                </u>
+
                                             </h4>
+
+                                            {info ? (
+                                                <div className="alert alert-info border border-dark text-center text-uppercasse mt-4 mb-4">
+                                                    {info}
+                                                </div>
+                                            ) : null}
 
                                             <div className="row">
 
-                                                <div className="col-md-4 mt-4">
+                                                <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
                                                             Apellido
@@ -108,7 +118,7 @@ const ModalRegistrarCliente = ({
                                                     />
                                                 </div>
 
-                                                <div className="col-md-4 mt-4">
+                                                <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
                                                             Nombre
@@ -117,13 +127,13 @@ const ModalRegistrarCliente = ({
                                                     <input
                                                         className="form-control mt-2"
                                                         type="text"
-                                                        placeholder="Apellido"
+                                                        placeholder="Nombre"
                                                         //ref={idClienteRef}
                                                         value={cliente.nombre}
                                                     />
                                                 </div>
 
-                                                <div className="col-md-4 mt-4">
+                                                <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
                                                             DNI
@@ -132,9 +142,24 @@ const ModalRegistrarCliente = ({
                                                     <input
                                                         className="form-control mt-2"
                                                         type="text"
-                                                        placeholder="Apellido"
+                                                        placeholder="DNI"
                                                         //ref={dniRef}
                                                         value={cliente.dni}
+                                                    />
+                                                </div>
+
+                                                <div className="col-md-3 mt-4">
+                                                    <label>
+                                                        <u>
+                                                            Zona
+                                                        </u>
+                                                    </label>
+                                                    <input
+                                                        className="form-control mt-2"
+                                                        type="text"
+                                                        placeholder="Zona"
+                                                        //ref={dniRef}
+                                                        value={cliente.idzona}
                                                     />
                                                 </div>
                                             </div>
@@ -144,21 +169,21 @@ const ModalRegistrarCliente = ({
                                         <div className="mt-4 border border-dark p-4 bgbox">
 
                                             <h4>
-                                                <strong>
-                                                    <u>
-                                                        Confeccion del Credito
-                                                    </u>
-                                                </strong>
+
+                                                <u>
+                                                    Confeccion del Credito
+                                                </u>
+
                                             </h4>
 
-                                            <div className="row">
+                                            <div className="row mt-4 border border-dark p-3">
 
-                                                <div className="form-group col-md-4 mt-4">
+                                                <div className="form-group col-md-4 mt-2">
                                                     <label>
-                                                        <strong>
-                                                            {" "}
-                                                            <u> Vendedor: </u>
-                                                        </strong>
+
+                                                        {" "}
+                                                        <u> Vendedor: </u>
+
                                                     </label>
                                                     <select
                                                         className="form-select mt-2"
@@ -176,7 +201,7 @@ const ModalRegistrarCliente = ({
                                                     </select>
                                                 </div>
 
-                                                <div className="col-md-2 mt-4">
+                                                <div className="col-md-2 mt-2">
                                                     <label>
                                                         <u>
                                                             Prestamo
@@ -191,19 +216,19 @@ const ModalRegistrarCliente = ({
                                                     />
                                                 </div>
 
-                                                <div className="form-group col-md-3 mt-4">
+                                                <div className="form-group col-md-3 mt-2">
                                                     <label>
-                                                        <strong>
-                                                            {" "}
-                                                            <u> Cuotas: </u>
-                                                        </strong>
+
+                                                        {" "}
+                                                        <u> Cuotas: </u>
+
                                                     </label>
                                                     <select
                                                         className="form-select mt-2"
                                                         name="capital"
                                                         ref={cuotasRef}
                                                     >
-                                                        <option selected value="no"> Elige el plan de cuotas..</option>
+                                                        <option selected value="no"> Elige el plan..</option>
                                                         {planCuotas
                                                             ? planCuotas.map((c, index) => (
                                                                 <option key={index} value={c.plan_cuotas}>
@@ -214,15 +239,17 @@ const ModalRegistrarCliente = ({
                                                     </select>
                                                 </div>
 
-                                                <div className="form-group col-md-3 mt-4">
+                                                <div className="form-group col-md-3 mt-2">
                                                     <div className="mt-2"></div>
                                                     <button className="mt-4 btn btn-primary" onClick={calculoPrestamo}>
                                                         Calcular
                                                     </button>
                                                 </div>
+                                            </div>
 
+                                            <div className="row mt-4 border border-dark p-3">
 
-                                                <div className="col-md-2 mt-4">
+                                                <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
                                                             Capital a Devolver
@@ -237,7 +264,7 @@ const ModalRegistrarCliente = ({
                                                     />
                                                 </div>
 
-                                                <div className="col-md-2 mt-4">
+                                                <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
                                                             Valor de la Cuotas
@@ -252,8 +279,40 @@ const ModalRegistrarCliente = ({
                                                     />
                                                 </div>
 
+                                                <div className="col-md-3 mt-4">
+                                                    <label>
+                                                        <u>
+                                                            Anticipo
+                                                        </u>
+                                                    </label>
+                                                    <input
+                                                        className="form-control mt-2"
+                                                        type="number"
+                                                        placeholder="Anticipo"
+                                                        id="anticipo"
+                                                        ref={anticipoRef}
+                                                        onChange={calcTotalFinal}
+                                                        defaultValue="0"
 
+                                                    />
+                                                </div>
+
+                                                <div className="col-md-3 mt-4">
+                                                    <label>
+                                                        <u>
+                                                            Total Final
+                                                        </u>
+                                                    </label>
+                                                    <input
+                                                        className="form-control mt-2"
+                                                        type="number"
+                                                        placeholder="Total Final"
+                                                        value={totalFinal}
+
+                                                    />
+                                                </div>
                                             </div>
+
                                         </div>
 
                                     </>
@@ -268,7 +327,7 @@ const ModalRegistrarCliente = ({
                             : null}
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-primary" >Registrar</button>
+                        <button type="button" className="btn btn-primary" onClick={registrarCredito}>Registrar</button>
                         <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
