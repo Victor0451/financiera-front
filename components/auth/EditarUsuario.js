@@ -1,6 +1,5 @@
 import React from "react";
-import Spinner from "../layout/Spinner";
-
+import Spinner from "../Layouts/Spinner";
 const EditarUsuario = ({
   username,
   nombreRef,

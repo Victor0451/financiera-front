@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../components/Layouts/Layout";
 import EditarUsuario from "../../components/auth/EditarUsuario";
 import axios from "axios";
 import Router from "next/router";
@@ -8,7 +8,7 @@ import toastr from "toastr";
 import BuscarUsuario from "../../components/auth/BuscarUsuario";
 import { ip } from '../../config/config'
 
-const editar = () => {
+const Editar = () => {
   let userRef = React.createRef();
   let nombreRef = React.createRef();
   let apellidoRef = React.createRef();
@@ -26,7 +26,7 @@ const editar = () => {
     if (!token) {
       Router.push("/redirect");
     }
-  }, []);
+  }, [token]);
 
   const buscarUserName = async (e) => {
     e.preventDefault();
@@ -103,4 +103,4 @@ const editar = () => {
   );
 };
 
-export default editar;
+export default Editar;

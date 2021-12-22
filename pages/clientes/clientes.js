@@ -56,7 +56,7 @@ const Clientes = () => {
             traerClientes()
             traerZonas()
         }
-    }, []);
+    }, [token]);
 
 
     const traerClientes = async () => {

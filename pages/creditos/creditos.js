@@ -57,7 +57,7 @@ const Creditos = () => {
             traerEmpleados()
 
         }
-    }, []);
+    }, [token]);
 
     const traerCreditos = async () => {
         await axios.get(`${ip}api/creditos/listadocreditos`)

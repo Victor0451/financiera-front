@@ -11,7 +11,7 @@ import FormCobranzaCreditos from '../../components/cobranza/FormCobranzaCreditos
 import ModalRegistrarCobranza from '../../components/cobranza/ModalRegistrarCobranza';
 import { registrarHistoria } from '../../utils/funciones'
 
-const Pagos = () => {
+const Cobranza = () => {
 
     let montoRef = React.createRef()
     let cuotaRef = React.createRef()
@@ -31,6 +31,9 @@ const Pagos = () => {
 
     let token = jsCookie.get("token");
     let router = useRouter();
+    
+    const idcliente = router.query.idcliente;
+    const idcredito = router.query.idcredito;
 
     useEffect(() => {
         if (!token) {
@@ -43,9 +46,6 @@ const Pagos = () => {
                 guardarUsuario(userData);
             }
 
-            const idcliente = router.query.idcliente;
-            const idcredito = router.query.idcredito;
-
             traeCliente(idcliente)
 
             traeCredito(idcredito)
@@ -53,7 +53,7 @@ const Pagos = () => {
             traeCobranza(idcredito)
 
         }
-    }, []);
+    }, [token]);
 
 
     const traeCliente = async (id) => {
@@ -241,4 +241,4 @@ const Pagos = () => {
     )
 }
 
-export default Pagos
+export default Cobranza

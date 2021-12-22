@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../components/Layouts/Layout";
 import RegistrarUsuario from "../../components/auth/RegistrarUsuario";
 import axios from "axios";
 import Router from "next/router";
@@ -26,7 +26,7 @@ const Registro = () => {
     if (!token) {
       Router.push("/redirect");
     }
-  }, []);
+  }, [token]);
 
   const [error, guardarError] = useState(false);
 
