@@ -48,7 +48,7 @@ const Homepage = () => {
         <Layout>
 
             {
-                !noticia ? (<div className='alert alert-info border border-dark text-center text-uppercase'>
+                !noticia ? (<div className='alert alert-info border border-dark text-center text-uppercase container mt-4'>
                     No hay novedades
                 </div>)
                     : (<Novedades noticia={noticia} />)
