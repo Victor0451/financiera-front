@@ -26,7 +26,7 @@ const Registro = () => {
     if (!token) {
       Router.push("/redirect");
     }
-  }, [token]);
+  }, []);
 
   const [error, guardarError] = useState(false);
 
@@ -60,7 +60,7 @@ const Registro = () => {
       });
 
       await axios.post(
-        `${ip}api/sgi/operador/postoperador`,
+        `${ip}api/auth/operador/postoperador`,
         body,
         config
       );

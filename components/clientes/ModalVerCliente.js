@@ -68,6 +68,19 @@ const ModalVerCliente = ({ row, conyugue, razonSoc }) => {
                                         <div className="col-md-6 mt-4">
                                             <label>
                                                 <u>
+                                                    Localidad
+                                                </u>
+                                            </label>
+                                            <input
+                                                className="form-control mt-2"
+                                                value={row.localidad}
+                                                readOnly
+                                            />
+                                        </div>
+
+                                        <div className="col-md-6 mt-4">
+                                            <label>
+                                                <u>
                                                     Telefono
                                                 </u>
                                             </label>

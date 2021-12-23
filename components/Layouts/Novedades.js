@@ -1,16 +1,17 @@
+import moment from 'moment'
 import React from 'react'
 
-const Novedades = () => {
+const Novedades = ({ noticia }) => {
     return (
-        <div className="alert alert-info container mt-4" role="alert">
+        <div className="alert alert-info border border-dark container mt-4" role="alert">
             <h4 className="alert-heading">Novedades</h4>
+            <hr />
             <p>
-                <i className="fa fa-info-circle" aria-hidden="true">
-                    {""} Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.
-                </i>
+                <i className="fa fa-info-circle" aria-hidden="true"></i>
+                {" "}{noticia.noticia}
             </p>
             <hr />
-            <p className="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+            <p className="mb-0 text-center">{moment(noticia.fecha).format('DD/MM/YYYY')} - {noticia.operador}</p>
         </div>
     )
 }

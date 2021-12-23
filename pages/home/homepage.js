@@ -4,10 +4,14 @@ import jsCookie from 'js-cookie'
 import Router from 'next/router';
 import Novedades from '../../components/Layouts/Novedades';
 import Botones from '../../components/Layouts/Botones';
+import axios from 'axios';
+import { ip } from '../../config/config'
 
 const Homepage = () => {
 
     const [user, guardarUsuario] = useState(null);
+    const [noticia, guardarNoticia] = useState(null);
+
 
     let token = jsCookie.get("token");
 
@@ -21,13 +25,35 @@ const Homepage = () => {
                 let userData = JSON.parse(usuario);
                 guardarUsuario(userData);
             }
+
+            mostarNoticias(userData.perfil)
         }
     }, []);
+
+
+
+    const mostarNoticias = async (perfil) => {
+        await axios
+            .get(`${ip}api/noticias/noticias/${perfil}`)
+            .then((res) => {
+                guardarNoticia(noticia);
+                console.log(res.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     return (
         <Layout>
 
-            <Novedades />
+            {
+                !noticia ? (<div className='alert alert-info border border-dark text-center text-uppercase'>
+                    No hay novedades
+                </div>)
+                    : (<Novedades noticia={noticia} />)
+            }
+
 
             <Botones />
 

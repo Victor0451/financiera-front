@@ -9,6 +9,8 @@ const ModalRegistrarCliente = ({
     vendedorRef,
     planCuotas,
     anticipoRef,
+    capDevRef,
+    cuoPrestRef,
     cliente,
     empleados,
     errores,
@@ -259,7 +261,8 @@ const ModalRegistrarCliente = ({
                                                         className="form-control mt-2"
                                                         type="number"
                                                         placeholder="Prestamos"
-                                                        value={capadev}
+                                                        defaultValue={capadev}
+                                                        readOnly
 
                                                     />
                                                 </div>
@@ -274,7 +277,9 @@ const ModalRegistrarCliente = ({
                                                         className="form-control mt-2"
                                                         type="number"
                                                         placeholder="Prestamos"
-                                                        value={cuoprest}
+                                                        defaultValue={cuoprest}
+                                                        ref={cuoPrestRef}
+
 
                                                     />
                                                 </div>
@@ -300,14 +305,15 @@ const ModalRegistrarCliente = ({
                                                 <div className="col-md-3 mt-4">
                                                     <label>
                                                         <u>
-                                                            Total Final
+                                                            Total Final: {totalFinal}
                                                         </u>
                                                     </label>
                                                     <input
                                                         className="form-control mt-2"
                                                         type="number"
                                                         placeholder="Total Final"
-                                                        value={totalFinal}
+                                                        
+                                                        ref={capDevRef}
 
                                                     />
                                                 </div>

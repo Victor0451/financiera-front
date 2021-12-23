@@ -14,7 +14,7 @@ const LoginUsuario = ({
   return (
     <div className="container ">
       <form
-        className=" container mt-4 border border-dark p-5 col-md-6 alert alert-primary "
+        className=" container mt-4 border border-dark p-5 col-md-6 bgbox "
         onSubmit={handleSubmit}
       >
         <h1 className="mb-4">
@@ -22,10 +22,10 @@ const LoginUsuario = ({
         </h1>
         <div className="row  ">
           <div className="form-group col-md-12">
-            <label>Usuario</label>
+            <label><u>Usuario</u></label>
             <input
               type="text"
-              className="form-control"
+              className="form-control mt-2"
               placeholder="Usuario"
               name="usuario"
               value={usuario}
@@ -39,11 +39,11 @@ const LoginUsuario = ({
             )}
           </div>
 
-          <div className="form-group col-md-12">
-            <label>Contraseña</label>
+          <div className="form-group col-md-12 mt-4">
+            <label><u>Contraseña</u></label>
             <input
               type="password"
-              className="form-control"
+              className="form-control mt-2"
               placeholder="Contrasena"
               name="contrasena"
               value={contrasena}
@@ -57,7 +57,7 @@ const LoginUsuario = ({
             )}
           </div>
 
-          <div className="col-md-12">
+          <div className="col-md-12 d-flex justify-content-end mt-4">
             <button type="submit" className="btn btn-primary btn-block mt-4">
               Ingresar
             </button>

@@ -34,12 +34,17 @@ const Editar = () => {
       guardarErrorUser("Debes ingresar un nombre de usuario");
     } else {
       let id = userRef.current.value;
-      console.log(id);
+
       await axios
-        .get(`${ip}api/sgi/operador/operador/${id}`)
+        .get(`${ip}api/auth/operador/operador/${id}`)
         .then((res) => {
-          guardarUsername(res.data);
-          console.log(res.data);
+          if (res.data) {
+            guardarUsername(res.data);
+            toastr.success("Usuario encontrado", "ATENCION")
+          } else {
+            toastr.error("El usuario que buscas no se encuentra registrado")
+          }
+
         })
         .catch((error) => {
           console.log(error);
@@ -65,17 +70,18 @@ const Editar = () => {
 
     await axios
       .put(
-        `${ip}api/sgi/operador/editar/${user.usuario}`,
+        `${ip}api/auth/operador/editar/${user.usuario}`,
         user
       )
       .then((res) => {
-        console.log(res);
+
         if (res.status === 200) {
           toastr.success("Usuario editado con exito", "ATENCION");
         }
       })
       .catch((error) => {
         console.log(error);
+        toastr.error("Ocurrio un error al editar el usuario", "ATENCION")
       });
   };
 

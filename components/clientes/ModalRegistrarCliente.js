@@ -18,9 +18,10 @@ const ModalRegistrarCliente = ({
     direccionRSRef,
     barrioRSRef,
     telefonoRSRef,
+    localidadRef,
     zonas,
     registroCliente,
-        errores
+    errores
 }) => {
 
 
@@ -114,6 +115,21 @@ const ModalRegistrarCliente = ({
                                         type="text"
                                         placeholder="Barrio"
                                         ref={barrioRef}
+
+                                    />
+                                </div>
+
+                                <div className="col-md-6 mt-4">
+                                    <label>
+                                        <u>
+                                            Localidad
+                                        </u>
+                                    </label>
+                                    <input
+                                        className="form-control mt-2"
+                                        type="text"
+                                        placeholder="Localidad"
+                                        ref={localidadRef}
 
                                     />
                                 </div>

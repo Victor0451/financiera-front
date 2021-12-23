@@ -10,8 +10,8 @@ import Router from "next/router";
 import ListadoCreditos from '../../components/creditos/ListadoCreditos';
 import ModalRegistrarCliente from '../../components/creditos/ModalRegistrarCredito';
 import ModalVerCredito from '../../components/creditos/ModalVerCredito';
-import {registrarHistoria, push} from '../../utils/funciones'
- 
+import { registrarHistoria, push } from '../../utils/funciones'
+
 const Creditos = () => {
 
     let idClienteRef = React.createRef();
@@ -20,6 +20,8 @@ const Creditos = () => {
     let prestamoRef = React.createRef();
     let vendedorRef = React.createRef();
     let anticipoRef = React.createRef();
+    let capDevRef = React.createRef()
+    let cuoPrestRef = React.createRef()
 
 
     const [cuoprest, guardarCuoprest] = useState(null);
@@ -222,7 +224,14 @@ const Creditos = () => {
 
             guardarTotalFinal(capadev)
 
-        } else {
+        } else if (capDevRef.current.value !== "") {
+
+            let total = capDevRef.current.value - anti
+
+            guardarTotalFinal(total)
+
+        }
+        else {
 
             let total = capadev - anti
 
@@ -243,8 +252,8 @@ const Creditos = () => {
             const credito = {
                 idcliente: cliente.idcliente,
                 prestamo: prestamoRef.current.value,
-                monto_final: totalFinal,
-                monto_cuota: cuoprest,
+                monto_final: capDevRef.current.value,
+                monto_cuota: cuotasRef.current.value,
                 cant_cuota: cuotasRef.current.value,
                 monto_pagado: 0,
                 anticipo: anticipoRef.current.value,
@@ -255,6 +264,8 @@ const Creditos = () => {
                 estado: 1
             }
 
+
+
             if (credito.vendedor === "no") {
                 guardarErrores("Debes ingresar al vendedor del credito")
             } else if (credito.prestamo === "") {
@@ -263,8 +274,9 @@ const Creditos = () => {
                 guardarErrores("Debes ingresar el plan de cuotas del credito")
             } else if (!capadev) {
                 guardarErrores("Debes calcular el credito para obtener el total final y la cuota del credito")
+            } else if (credito.monto_final === "") {
+                credito.monto_final = totalFinal
             } else {
-
                 if (credito.anticipo === "") {
                     credito.anticipo = 0
                 }
@@ -325,7 +337,7 @@ const Creditos = () => {
         });
     }
 
-  
+
 
     return (
         <Layout>
@@ -347,6 +359,8 @@ const Creditos = () => {
                 vendedorRef={vendedorRef}
                 cuotasRef={cuotasRef}
                 anticipoRef={anticipoRef}
+                capDevRef={capDevRef}
+                cuoPrestRef={cuoPrestRef}
                 buscarCliente={buscarCliente}
                 errores={errores}
                 cuoprest={cuoprest}

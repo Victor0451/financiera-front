@@ -30,6 +30,7 @@ const Clientes = () => {
     let direccionRSRef = React.createRef()
     let barrioRSRef = React.createRef()
     let telefonoRSRef = React.createRef()
+    let localidadRef = React.createRef()
 
 
     const [user, guardarUsuario] = useState(null);
@@ -126,6 +127,7 @@ const Clientes = () => {
             direccion: direccionRef.current.value,
             cod_postal: codigoPostalRef.current.value,
             barrio: barrioRef.current.value,
+            localidad: localidadRef.current.value,
             fecha_nacimiento: fechaNacRef.current.value,
             idzona: zonaRef.current.value,
             operador: user.usuario,
@@ -158,6 +160,8 @@ const Clientes = () => {
             guardarErrores("Debes ingresar la direccion")
         } else if (reg.barrio === "") {
             guardarErrores("Debes ingresar el barrio")
+        } else if (reg.localidad === "") {
+            guardarErrores("Debes ingresar la localidad")
         } else if (reg.telefono === "") {
             guardarErrores("Debes ingresar el telefono")
         } else if (reg.idzona === "no") {
@@ -301,6 +305,7 @@ const Clientes = () => {
                             direccionRSRef={direccionRSRef}
                             barrioRSRef={barrioRSRef}
                             telefonoRSRef={telefonoRSRef}
+                            localidadRef={localidadRef}
                             zonas={zonas}
                             registroCliente={registroCliente}
                             errores={errores}
