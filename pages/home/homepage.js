@@ -12,7 +12,6 @@ const Homepage = () => {
     const [user, guardarUsuario] = useState(null);
     const [noticia, guardarNoticia] = useState(null);
 
-
     let token = jsCookie.get("token");
 
     useEffect(() => {
@@ -36,24 +35,18 @@ const Homepage = () => {
         await axios
             .get(`${ip}api/noticias/noticias/${perfil}`)
             .then((res) => {
-                guardarNoticia(noticia);
-                console.log(res.data)
+                guardarNoticia(res.data);
             })
             .catch((error) => {
                 console.log(error);
             });
     };
 
+
     return (
         <Layout>
 
-            {
-                !noticia ? (<div className='alert alert-info border border-dark text-center text-uppercase container mt-4'>
-                    No hay novedades
-                </div>)
-                    : (<Novedades noticia={noticia} />)
-            }
-
+            <Novedades noticia={noticia} />
 
             <Botones />
 

@@ -9,7 +9,6 @@ const NuevaNoticia = ({
   error,
   noticia,
   operadorRef,
-  fechaRef,
   perfilRef,
   today,
   usuario,
@@ -31,7 +30,6 @@ const NuevaNoticia = ({
                 className="form-control mt-2"
                 value={today}
                 name="fecha"
-                ref={fechaRef}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />

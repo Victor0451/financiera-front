@@ -2,6 +2,11 @@ import moment from 'moment'
 import React from 'react'
 
 const Novedades = ({ noticia }) => {
+
+    if (!noticia) return (<div className='alert alert-info border border-dark text-center text-uppercase container mt-4'>
+        No hay novedades
+    </div>)
+
     return (
         <div className="alert alert-info border border-dark container mt-4" role="alert">
             <h4 className="alert-heading">Novedades</h4>
@@ -11,7 +16,7 @@ const Novedades = ({ noticia }) => {
                 {" "}{noticia.noticia}
             </p>
             <hr />
-            <p className="mb-0 text-center">{moment(noticia.fecha).format('DD/MM/YYYY')} - {noticia.operador}</p>
+            <p className="mb-0 text-center">{moment(noticia.fecha).format('DD/MM/YYYY HH:mm:ss')} - {noticia.operador}</p>
         </div>
     )
 }

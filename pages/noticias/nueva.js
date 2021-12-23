@@ -26,7 +26,6 @@ const Nueva = () => {
   }, []);
 
   const operadorRef = React.createRef();
-  const fechaRef = React.createRef();
   const perfilRef = React.createRef();
 
   const [error, guardarError] = useState(false);
@@ -40,7 +39,7 @@ const Nueva = () => {
     try {
       const noti = {
         operador: operadorRef.current.value,
-        fecha: moment(fechaRef).format("YYYY-MM-DD HH:mm:ss"),
+        fecha: moment().format("YYYY-MM-DD HH:mm:ss"),
         noticia,
         perfil: perfilRef.current.value,
       };
@@ -78,7 +77,6 @@ const Nueva = () => {
             error={error}
             noticia={noticia}
             operadorRef={operadorRef}
-            fechaRef={fechaRef}
             today={today}
             usuario={usuario}
             perfilRef={perfilRef}

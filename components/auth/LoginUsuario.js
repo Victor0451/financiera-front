@@ -61,13 +61,12 @@ const LoginUsuario = ({
             <button type="submit" className="btn btn-primary btn-block mt-4">
               Ingresar
             </button>
-
-            {error && (
-              <div className="mt-2 form-group text-center alert alert-danger">
-                {error}
-              </div>
-            )}
           </div>
+          {error && (
+            <div className="mt-4 form-group text-center alert alert-danger border border-dark">
+              {error}
+            </div>
+          )}
         </div>
       </form>
     </div>
