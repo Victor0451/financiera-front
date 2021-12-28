@@ -15,7 +15,6 @@ export const registrarHistoria = async (id, accion, user) => {
 
     await axios.post(`${ip}api/historialcliente/reghistorial`, historial)
         .then(res => {
-            console.log(res.data)
 
             if (res.status === 200) {
                 toastr.info("Esta accion se registor en el historial", "ATENCION")

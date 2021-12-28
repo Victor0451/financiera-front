@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import FormCobranzaCreditos from '../../components/cobranza/FormCobranzaCreditos';
 import ModalRegistrarCobranza from '../../components/cobranza/ModalRegistrarCobranza';
 import { registrarHistoria } from '../../utils/funciones'
+import { total } from 'react-big-calendar/lib/utils/dates';
 
 const Cobranza = () => {
 
@@ -31,7 +32,7 @@ const Cobranza = () => {
 
     let token = jsCookie.get("token");
     let router = useRouter();
-    
+
     const idcliente = router.query.idcliente;
     const idcredito = router.query.idcredito;
 
@@ -107,6 +108,9 @@ const Cobranza = () => {
     }
 
     const preCargarCobranza = () => {
+
+        let cuo = nupagos.length + cobranza.length
+
         const precarga = {
             idcredito: credito.idcredito,
             idcliente: cliente.idcliente,
@@ -119,11 +123,12 @@ const Cobranza = () => {
             estado: 1
         };
 
-
         if (precarga.monto === "") {
             toastr.warning("Debes ingresar el monto a cobrar", "ATENCION");
         } else if (precarga.cuota === "") {
             toastr.warning("Debes ingresar la cuota a cobrar", "ATENCION");
+        } else if (cuo === credito.cant_cuota) {
+            toastr.info("Con las cuotas precargadas, el cliente ya completo su plan de pagos acordado en el credito", "ATENCION")
         } else {
 
             let encontrado = false
@@ -180,29 +185,73 @@ const Cobranza = () => {
         guardarNuPagos([...nupagos]);
     };
 
-    const registrarPagosCredito = async () => {
-        await axios.post(`${ip}api/cobranza/regpagoscredito`, nupagos)
+    const putDatosCredito = async () => {
+
+        let cuo = nupagos.length + cobranza.length
+
+        const datos = {
+            monto_pagado: totalCobranza(nupagos) + credito.monto_pagado,
+            cuotas_pagadas: cuo,
+            estado: 1
+        }
+
+        if (credito.cant_cuota === cuo) {
+            datos.estado = 0
+        }
+
+        console.log(datos)
+        await axios.put(`${ip}api/creditos/puttotales/${credito.idcredito}`, datos)
             .then(res => {
-                console.log(res.data)
                 if (res.status === 200) {
-                    toastr.success("Se acredito el pago correctamente", "ATENCION")
-
-                    let accion = `Se acredito la cobranza del credito ${credito.idcredito}, del cliente ${cliente.idcliente}`
-
-                    registrarHistoria(cliente.idcliente, accion, user.usuario)
+                    toastr.success("Se actualizaron los datos del credito", "ATENCION")
                 }
             })
             .catch(error => {
                 console.log(error)
-                toastr.error("Ocurrio un error al acreditar el pago", "ATENCION")
+                toastr.error("Ocurrio un error al actualizar los datos del credito", "ATENCION")
             })
+    }
+
+    const registrarPagosCredito = async () => {
+
+        if (nupagos.length === 0) {
+            toastr.info("No se precargo ningun pago, por ende no se registrara nada", "ATENCION")
+
+        } else if (nupagos.length > 0) {
+
+            await axios.post(`${ip}api/cobranza/regpagoscredito`, nupagos)
+                .then(res => {
+
+                    if (res.status === 200) {
+                        toastr.success("Se acredito el pago correctamente", "ATENCION")
+
+                        let accion = `Se acredito la cobranza del credito ${credito.idcredito}, del cliente ${cliente.idcliente}`
+
+                        registrarHistoria(cliente.idcliente, accion, user.usuario)
+
+                        putDatosCredito()
+
+
+                        setTimeout(() => {
+                            traeCobranza(credito.idcredito)
+
+                            traeCredito(credito.idcredito)
+                        }, 500);
+
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                    toastr.error("Ocurrio un error al acreditar el pago", "ATENCION")
+                })
+        }
     }
 
     const totalCobranza = (arr) => {
         let total = 0
 
         for (let i = 0; i < arr.length; i++) {
-            total += arr[i].monto
+            total += parseFloat(arr[i].monto)
         }
 
         return parseFloat(total)

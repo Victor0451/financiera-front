@@ -7,7 +7,8 @@ const ListadoCreditos = ({
     listado,
     verCredito,
     eliminarCredito,
-    push
+    push,
+    flag
 }) => {
 
 
@@ -56,40 +57,55 @@ const ListadoCreditos = ({
             name: "Fecha",
             selector: "fecha",
             sortable: true,
-            grow: 0.1
+            grow: 0.3
         },
         {
             name: "acciones",
             button: true,
-            grow: 0.2,
+            grow: 0.1,
             cell: row =>
             (
                 <>
-                    <button
-                        onClick={() => verCredito(row)}
-                        className="btn btn-sm btn-info me-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#verCredito"
-                    >
-                        <i className="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                    <button
-                        onClick={() => toastr.warning("Modulo en proceso de programacion", "ATENCION")}
-                        className="btn btn-sm btn-warning me-1"
-                    >
-                        <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    </button>
-                    <button
-                        className="btn btn-sm btn-danger me-1"
-                        onClick={() => eliminarCredito(row)}>
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </button>
-                    <button
-                        className="btn btn-sm btn-primary me-1"
-                        onClick={() => push('/cobranza/cobranza', row.idcliente, row.idcredito)}
-                    >
-                        <i className="fa fa-money" aria-hidden="true"></i>
-                    </button>
+                    {flag === true ?
+                        (
+                            <button
+                                className="btn btn-sm btn-primary me-1"
+                                data-bs-dismiss="modal"
+                                onClick={() => push('/cobranza/cobranza', row.idcliente, row.idcredito)}
+                            >
+                                <i className="fa fa-money" aria-hidden="true"></i>
+                            </button>
+                        )
+                        : (
+                            <>
+                                <button
+                                    onClick={() => verCredito(row)}
+                                    className="btn btn-sm btn-info me-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#verCredito"
+                                >
+                                    <i className="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                                <button
+                                    onClick={() => toastr.warning("Modulo en proceso de programacion", "ATENCION")}
+                                    className="btn btn-sm btn-warning me-1"
+                                >
+                                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                                <button
+                                    className="btn btn-sm btn-danger me-1"
+                                    onClick={() => eliminarCredito(row)}>
+                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>
+                                <button
+                                    className="btn btn-sm btn-primary me-1"
+                                    onClick={() => push('/cobranza/cobranza', row.idcliente, row.idcredito)}
+                                >
+                                    <i className="fa fa-money" aria-hidden="true"></i>
+                                </button>
+                            </>
+                        )
+                    }
 
                 </>
 

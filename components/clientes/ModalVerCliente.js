@@ -1,7 +1,11 @@
 import React from 'react'
+import ListadoCreditos from '../../components/creditos/ListadoCreditos'
+import { push } from '../../utils/funciones'
 
 
-const ModalVerCliente = ({ row, conyugue, razonSoc }) => {
+const ModalVerCliente = ({ row, conyugue, razonSoc, creditos }) => {
+
+    console.log(creditos)
 
     return (
         <div className="modal fade" id="verCliente" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -226,6 +230,34 @@ const ModalVerCliente = ({ row, conyugue, razonSoc }) => {
                                     </div>
                                 </div>
                             )}
+
+
+
+                        {creditos.length === 0 ?
+                            (<div className="alert alert-info border border-dark text-center text-uppercase mt-4 mb-4">No posee creditos activos</div>)
+                            : (
+                                <div className="mt-4 border border-dark p-4 bgbox">
+
+                                    <h4>
+                                        <strong>
+                                            <u>
+                                                Creditos Activos
+                                            </u>
+                                        </strong>
+                                    </h4>
+
+
+                                    <ListadoCreditos
+                                        listado={creditos}
+                                        push={push}
+                                        flag={true}
+                                    />
+
+                                </div>
+                            )}
+
+
+
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

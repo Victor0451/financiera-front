@@ -253,7 +253,7 @@ const Creditos = () => {
                 idcliente: cliente.idcliente,
                 prestamo: prestamoRef.current.value,
                 monto_final: capDevRef.current.value,
-                monto_cuota: cuotasRef.current.value,
+                monto_cuota: cuoPrestRef.current.value,
                 cant_cuota: cuotasRef.current.value,
                 monto_pagado: 0,
                 anticipo: anticipoRef.current.value,
@@ -265,7 +265,6 @@ const Creditos = () => {
             }
 
 
-
             if (credito.vendedor === "no") {
                 guardarErrores("Debes ingresar al vendedor del credito")
             } else if (credito.prestamo === "") {
@@ -274,11 +273,13 @@ const Creditos = () => {
                 guardarErrores("Debes ingresar el plan de cuotas del credito")
             } else if (!capadev) {
                 guardarErrores("Debes calcular el credito para obtener el total final y la cuota del credito")
-            } else if (credito.monto_final === "") {
-                credito.monto_final = totalFinal
             } else {
                 if (credito.anticipo === "") {
                     credito.anticipo = 0
+                }
+
+                if (credito.monto_final === "0") {
+                    credito.monto_final = totalFinal
                 }
 
                 await axios.post(`${ip}api/creditos/nuevocredito`, credito)

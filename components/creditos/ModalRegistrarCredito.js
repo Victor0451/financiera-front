@@ -1,5 +1,4 @@
 import React from 'react'
-import Spinner from '../Layouts/Spinner'
 
 const ModalRegistrarCliente = ({
     dniRef,
@@ -312,7 +311,7 @@ const ModalRegistrarCliente = ({
                                                         className="form-control mt-2"
                                                         type="number"
                                                         placeholder="Total Final"
-                                                        
+                                                        defaultValue="0"
                                                         ref={capDevRef}
 
                                                     />

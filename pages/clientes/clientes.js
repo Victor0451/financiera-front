@@ -39,6 +39,7 @@ const Clientes = () => {
     const [listado, guardarListado] = useState([]);
     const [conyugue, guardarConyugue] = useState([]);
     const [razonSoc, guardarRazonSoc] = useState([]);
+    const [creditos, guardarCreditos] = useState([]);
     const [errores, guardarErrores] = useState(null)
 
     let token = jsCookie.get("token");
@@ -96,6 +97,8 @@ const Clientes = () => {
                         console.log(error)
                         toastr.error("Ocurrio un error al traer al conyugue", "Atencion")
                     })
+
+                traerCreditosActivos(id)
 
             })
             .catch(error => {
@@ -269,6 +272,25 @@ const Clientes = () => {
 
     }
 
+    const traerCreditosActivos = async (id) => {
+
+        await axios.get(`${ip}api/creditos/creditoscliente/${id}`)
+            .then(res => {
+                if (res.data) {
+                    guardarCreditos(res.data)
+                    toastr.info("El cliente posee creditos activos", "ATENCION")
+                } else if (!res.data) {
+                    toastr.info("El cliente no posee creditos activos", "ATENCION")
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+                toastr.error("Ocurrio un error al buscar los creditos del cliente", "ATENCION")
+            })
+
+    }
+
 
     return (
         <Layout>
@@ -286,6 +308,7 @@ const Clientes = () => {
                             row={row}
                             conyugue={conyugue}
                             razonSoc={razonSoc}
+                            creditos={creditos}
                         />
 
                         <ModalRegistrarCliente

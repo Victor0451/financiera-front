@@ -9,7 +9,7 @@ const FormCobranzaCreditos = ({
     totalCobranza
 }) => {
     return (
-        <div className='container border border-dark bgbox mt-4'>
+        <div className='container border border-dark bgbox mt-4 p-4'>
             <h4>
                 <u>
                     Cobranza
@@ -102,6 +102,15 @@ const FormCobranzaCreditos = ({
                         </>
                     )}
 
+            {credito.estado === 0 ? (
+                <div className='mt-4 mb-4 alert alert-success border border-dark text-center text-uppercase'>
+                    El credito ya fue cancelado por completo.
+                </div>
+            ) : <div className='mt-4 mb-4 alert alert-info border border-dark text-center text-uppercase'>
+                Al credito le restan {credito.cant_cuota - credito.cuotas_pagadas} cuotas para cancelado.
+            </div>}
+
+
             {credito.idcredito ? (
                 <div className="mt-4 border border-dark p-4 bgbox">
                     <h4>
@@ -173,7 +182,7 @@ const FormCobranzaCreditos = ({
                             <input
                                 className="form-control mt-2"
                                 type="text"
-                                defaultValue={cuoPag}
+                                value={credito.cuotas_pagadas}
                                 readOnly
 
                             />
